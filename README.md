@@ -4,20 +4,11 @@
 
 > This Chrome extension is designed to check the status of Devin sessions and notify the user accordingly.
 
+## Motivation
+
+I created a Chrome extension to monitor Devin's session. When its status changes to "waiting," the extension sends a notification. While Devin completes tasks, I want to do other things, but I want to know when Devin is waiting for my response, so I created this extension. This Chrome extension's behavior was created by Devin 🎉.
+
 ## Features
 
-- Popup interface to manually check Devin status.
 - Automatic checking of Devin status at regular intervals.
 - Notifications to alert the user when Devin is awaiting their input.
-
-## Installation
-
-Instructions on how to install and use the extension will be provided here.
-
-## Usage
-
-Details on how to use the extension's features will be provided here.
-
-## Contributing
-
-Guidelines for contributing to the project will be provided here.

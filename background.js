@@ -60,7 +60,7 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
             if (sessionIdMatch && sessionIdMatch.length > 1) {
                 var sessionId = sessionIdMatch[1];
                 // Open the Devin session URL in a new tab
-                chrome.tabs.create({url: `hhttps://preview.devin.ai/devin/${sessionId}`});
+                chrome.tabs.create({url: `https://preview.devin.ai/devin/${sessionId}`});
             }
         });
     }

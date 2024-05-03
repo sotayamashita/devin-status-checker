@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "allow" },
+    "condition": {
+      "urlFilter": "https://preview.devin.ai/devin/*",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

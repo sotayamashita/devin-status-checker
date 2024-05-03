@@ -19,7 +19,3 @@ Details on how to use the extension's features will be provided here.
 ## Contributing
 
 Guidelines for contributing to the project will be provided here.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

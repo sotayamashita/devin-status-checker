@@ -13,23 +13,25 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
         chrome.tabs.query({url: "https://preview.devin.ai/devin/*"}, function(tabs) {
             // For each tab, execute the checkDevinStatus script
             tabs.forEach(function(tab) {
-                chrome.scripting.executeScript({
-                    target: {tabId: tab.id},
-                    function: checkDevinStatus
-                }, (injectionResults) => {
-                    // Process the results of the script execution
-                    for (const frameResult of injectionResults) {
-                        // If Devin is waiting, create a notification
-                        if (frameResult.result === 'Devin is waiting') {
-                            chrome.notifications.create({
-                                type: 'basic',
-                                iconUrl: 'icon.png',
-                                title: 'Devin Status',
-                                message: 'Devin is awaiting your response.'
-                            });
+                if (tab.id !== undefined) { // Ensure tab.id is defined
+                    chrome.scripting.executeScript({
+                        target: {tabId: tab.id},
+                        func: checkDevinStatus
+                    }, (injectionResults) => {
+                        // Process the results of the script execution
+                        for (const frameResult of injectionResults) {
+                            // If Devin is waiting, create a notification
+                            if (frameResult.result === 'Devin is waiting') {
+                                chrome.notifications.create('', {
+                                    type: 'basic',
+                                    iconUrl: 'icon.png',
+                                    title: 'Devin Status',
+                                    message: 'Devin is awaiting your response.'
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                }
             });
         });
     }
@@ -41,7 +43,7 @@ chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.action == "notify") {
             // Define the notification options
-            let options = {
+            let options: chrome.notifications.NotificationOptions = {
                 type: 'basic',
                 iconUrl: 'icon.png',
                 title: 'Notification from Devin',
@@ -51,7 +53,7 @@ chrome.runtime.onMessage.addListener(
                 ]
             };
             // Create the notification with the defined options
-            chrome.notifications.create(options);
+            chrome.notifications.create('', options);
         }
     }
 );
@@ -63,12 +65,14 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
         // Query the active tab in the current window
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             var currentTab = tabs[0];
-            // Extract the session ID from the current tab URL
-            var sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
-            if (sessionIdMatch && sessionIdMatch.length > 1) {
-                var sessionId = sessionIdMatch[1];
-                // Open the Devin session URL in a new tab
-                chrome.tabs.create({url: `https://preview.devin.ai/devin/${sessionId}`});
+            if (currentTab && currentTab.url) { // Ensure currentTab and currentTab.url are defined
+                // Extract the session ID from the current tab URL
+                var sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
+                if (sessionIdMatch && sessionIdMatch.length > 1) {
+                    var sessionId = sessionIdMatch[1];
+                    // Open the Devin session URL in a new tab
+                    chrome.tabs.create({url: `https://preview.devin.ai/devin/${sessionId}`});
+                }
             }
         });
     }
@@ -80,9 +84,9 @@ function checkDevinStatus() {
     const statusBarMessage = document.querySelector('.status-bar--message');
     if (statusBarMessage) {
         // Retrieve the text content of the status bar message
-        const messageText = statusBarMessage.textContent || statusBarMessage.innerText;
+        const messageText = statusBarMessage.textContent; // Removed innerText
         // If the message indicates Devin is awaiting, return 'Devin is waiting'
-        if (messageText.startsWith('Devin is awaiting')) {
+        if (messageText && messageText.startsWith('Devin is awaiting')) {
             return 'Devin is waiting';
         }
     }

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "es2016",
-    "module": "commonjs",
+    "module": "ESNext",
     "esModuleInterop": true,
-    "types": ["chrome", "node"],
+    "types": ["chrome", "node", "webextension-polyfill"],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true

@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import { Notifications } from 'webextension-polyfill';
 
 // Listener for when the extension is installed
 browser.runtime.onInstalled.addListener(() => {
@@ -43,43 +44,43 @@ browser.alarms.onAlarm.addListener((alarm) => {
 
 // Listener for messages from the popup script
 // This allows the popup to send notifications on demand
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action == "notify") {
-    // Define the notification options
-    const options: browser.Notifications.CreateNotificationOptions = {
-      type: "basic",
-      iconUrl: browser.runtime.getURL('icon.png'),
-      title: "Notification from Devin",
-      message: typeof request.message === 'string' ? request.message : "Notification triggered"
-    };
-    // Create the notification with the defined options
-    browser.notifications.create('', options);
+browser.runtime.onMessage.addListener(
+  (request: { action: string; message?: string }, sender, sendResponse) => {
+    if (request.action == "notify") {
+      // Define the notification options
+      let options: Notifications.CreateNotificationOptions = {
+        type: 'basic',
+        iconUrl: browser.runtime.getURL('icon.png'), // Ensure iconUrl is always a string
+        title: 'Notification from Devin',
+        message: request.message || "Notification triggered", // Ensure message is a string
+      };
+      // Create the notification with the defined options
+      browser.notifications.create('', options);
+    }
   }
-});
+);
 
 // Listener for notification button click
 // This provides a quick way for the user to navigate to the Devin session
-browser.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
-  if (buttonIndex === 0) {
-    // 'Check' button index
-    // Query the active tab in the current window
-    browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-      const currentTab = tabs[0];
-      if (currentTab && currentTab.url) {
-        // Ensure currentTab and currentTab.url are defined
-        // Extract the session ID from the current tab URL
-        const sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
-        if (sessionIdMatch && sessionIdMatch.length > 1) {
-          const sessionId = sessionIdMatch[1];
-          // Open the Devin session URL in a new tab
-          browser.tabs.create({
-            url: `https://preview.devin.ai/devin/${sessionId}`,
-          });
+browser.notifications.onButtonClicked.addListener(
+  (notificationId: string, buttonIndex: number) => {
+    if (buttonIndex === 0) { // 'Check' button index
+      // Query the active tab in the current window
+      browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
+        var currentTab = tabs[0];
+        if (currentTab && currentTab.url) { // Ensure currentTab and currentTab.url are defined
+          // Extract the session ID from the current tab URL
+          var sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
+          if (sessionIdMatch && sessionIdMatch.length > 1) {
+            var sessionId = sessionIdMatch[1];
+            // Open the Devin session URL in a new tab
+            browser.tabs.create({url: `https://preview.devin.ai/devin/${sessionId}`});
+          }
         }
-      }
-    });
+      });
+    }
   }
-});
+);
 
 // Function to be injected into the current tab to check Devin status
 function checkDevinStatusBackground() {

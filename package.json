@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@parcel/config-webextension": "^2.12.0",
+    "@parcel/transformer-typescript-tsc": "^2.12.0",
     "@types/chrome": "^0.0.267",
     "@types/webextension-polyfill": "^0.10.7",
     "@types/node": "^20.12.8",
@@ -36,5 +37,12 @@
     "typescript": "^5.4.5",
     "web-ext": "^7.11.0",
     "webextension-polyfill": "^0.11.0"
+  },
+  "targets": {
+    "serviceWorker": {
+      "context": "service-worker",
+      "source": "src/background.ts",
+      "outputFormat": "esmodule"
+    }
   }
 }

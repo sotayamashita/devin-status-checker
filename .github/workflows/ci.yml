@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ update-readme-motivation ]
+  pull_request:
+    branches: [ update-readme-motivation ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 'lts/*'
+    - name: Install dependencies
+      run: npm install
+    - name: Run build
+      run: npm run build
+    - name: Install Playwright browser
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: npm test

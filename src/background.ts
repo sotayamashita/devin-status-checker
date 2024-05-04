@@ -7,26 +7,27 @@ chrome.alarms.create('checkDevinStatusBackground', { periodInMinutes: 1 });
 
 // Listener for the alarm to check Devin's status
 // This alarm triggers every minute to check if Devin's status is 'waiting'
-chrome.alarms.onAlarm.addListener(function(alarm) {
+chrome.alarms.onAlarm.addListener(function(alarm: chrome.alarms.Alarm) {
     if (alarm.name === 'checkDevinStatusBackground') {
         // Query all tabs that match Devin's URL pattern
-        chrome.tabs.query({url: "https://preview.devin.ai/devin/*"}, function(tabs) {
+        chrome.tabs.query({url: "https://preview.devin.ai/devin/*"}, function(tabs: chrome.tabs.Tab[]) {
             // For each tab, execute the checkDevinStatusBackground script
-            tabs.forEach(function(tab) {
+            tabs.forEach(function(tab: chrome.tabs.Tab) {
                 if (tab.id !== undefined) { // Ensure tab.id is defined
                     chrome.scripting.executeScript({
                         target: {tabId: tab.id},
                         func: checkDevinStatusBackground
-                    }, (injectionResults) => {
+                    }, (injectionResults: chrome.scripting.InjectionResult[]) => {
                         // Process the results of the script execution
                         for (const frameResult of injectionResults) {
                             // If Devin is waiting, create a notification
                             if (frameResult.result === 'Devin is waiting') {
                                 chrome.notifications.create({
                                     type: 'basic',
-                                    iconUrl: 'icon.png',
+                                    iconUrl: chrome.runtime.getURL('icon.png') as string,
                                     title: 'Devin Status',
-                                    message: 'Devin is awaiting your response.'
+                                    message: 'Devin is awaiting your response.',
+                                    requireInteraction: false
                                 });
                             }
                         }
@@ -40,17 +41,18 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 // Listener for messages from the popup script
 // This allows the popup to send notifications on demand
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    function(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) {
         if (request.action == "notify") {
             // Define the notification options
-            let options: chrome.notifications.NotificationOptions = {
+            let options: chrome.notifications.NotificationOptions<true> = {
                 type: 'basic',
-                iconUrl: 'icon.png',
+                iconUrl: chrome.runtime.getURL('icon.png') as string, // Ensure iconUrl is always a string
                 title: 'Notification from Devin',
                 message: request.message || "Notification triggered",
                 buttons: [
                     {title: "Check"}
-                ]
+                ],
+                requireInteraction: false // Explicitly set requireInteraction to match NotificationOptions<false>
             };
             // Create the notification with the defined options
             chrome.notifications.create(options);
@@ -60,10 +62,10 @@ chrome.runtime.onMessage.addListener(
 
 // Listener for notification button click
 // This provides a quick way for the user to navigate to the Devin session
-chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
+chrome.notifications.onButtonClicked.addListener(function(notificationId: string, buttonIndex: number) {
     if (buttonIndex === 0) { // 'Check' button index
         // Query the active tab in the current window
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs: chrome.tabs.Tab[]) {
             var currentTab = tabs[0];
             if (currentTab && currentTab.url) { // Ensure currentTab and currentTab.url are defined
                 // Extract the session ID from the current tab URL

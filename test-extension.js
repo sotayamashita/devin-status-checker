@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 
 (async () => {
   const browser = await chromium.launch({
-    headless: false, // Extensions only work in non-headless mode
+    headless: true, // Run in headless mode for CI environment
     args: [
       `--disable-extensions-except=${__dirname}/dist`,
       `--load-extension=${__dirname}/dist`

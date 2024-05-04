@@ -15,8 +15,8 @@ const { chromium } = require('playwright');
     const page = await context.newPage();
 
     // The extension ID is typically the ID of the unpacked extension in the developer mode.
-    // For testing purposes, we're using a known placeholder value.
-    const extensionID = 'your-known-extension-id'; // Replace with your actual known extension ID
+    // For testing purposes, we're using the actual extension ID retrieved.
+    const extensionID = 'flhjkhjndloaknappoiodmplbjnlaeml'; // Actual extension ID
 
     // Navigate to the extension popup page
     await page.goto(`chrome-extension://${extensionID}/popup.html`);

@@ -7,33 +7,51 @@ on:
     branches: [ main, topic/webextension ]
 
 jobs:
-  build:
+  build-and-push-docker-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v4
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ghcr.io/${{ github.repository }}/devin-status-checker:latest
+
+  ci:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}/devin-status-checker:latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 'lts/*'
-        cache: 'pnpm'
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 'latest'
-    - name: Print PATH
-      run: echo "PATH=$PATH"
-    - name: Check pnpm file mode
-      run: ls -l $(which pnpm)
-    - name: Print pnpm version
-      run: pnpm --version
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
     - name: Type check
       run: pnpm run type-check
+
     - name: Run build
       run: pnpm run build
+
     - name: Install Playwright browser
       run: npx playwright install --with-deps
+
     - name: Run Playwright tests
       run: pnpm test

@@ -17,8 +17,10 @@ jobs:
       with:
         node-version: 'lts/*'
         cache: 'pnpm'
-    - name: Install pnpm
-      run: npm install -g pnpm
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 'latest'
     - name: Print PATH
       run: echo "PATH=$PATH"
     - name: Check pnpm file mode

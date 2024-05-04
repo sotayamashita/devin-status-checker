@@ -1,18 +1,19 @@
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright');
 
 (async () => {
-  const browser = await puppeteer.launch({
-    headless: true, // Run in headless mode
+  const browser = await chromium.launch({
+    headless: false, // Extensions only work in non-headless mode
     args: [
-      `--disable-extensions-except=${__dirname}/dist`, // Disable all extensions except the one being tested
-      `--load-extension=${__dirname}/dist`, // Load the extension
-      '--no-sandbox' // Added no-sandbox flag for headless execution
+      `--disable-extensions-except=${__dirname}/dist`,
+      `--load-extension=${__dirname}/dist`
     ]
   });
 
   try {
-    // Open a new page
-    const page = await browser.newPage();
+    // Creating a new browser context and page
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
     // Navigate to a test page (this should be a page where the extension is expected to run)
     await page.goto('https://example.com');
 
@@ -24,7 +25,7 @@ const puppeteer = require('puppeteer');
     // For example, if the extension injects a specific element into the page,
     // you could wait for that element to appear as a confirmation that the
     // extension's content scripts are running:
-    // await page.waitForSelector('#injected-element-id');
+    await page.waitForSelector('#injected-element-id', { timeout: 10000 });
 
     // If the element is found, log success
     console.log('Extension content scripts are running.');

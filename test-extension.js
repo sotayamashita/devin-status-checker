@@ -2,10 +2,11 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false, // Run in non-headless mode
+    headless: true, // Run in headless mode
     args: [
       `--disable-extensions-except=${__dirname}/dist`, // Disable all extensions except the one being tested
-      `--load-extension=${__dirname}/dist` // Load the extension
+      `--load-extension=${__dirname}/dist`, // Load the extension
+      '--no-sandbox' // Added no-sandbox flag for headless execution
     ]
   });
 

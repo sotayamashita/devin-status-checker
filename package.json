@@ -1,17 +1,23 @@
 {
-  "name": "chrome-extension",
+  "private": true,
+  "name": "devin-status-checker",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/background.js",
   "scripts": {
     "test": "pnpm exec node tests/extension.spec.ts",
     "prepare": "pnpm exec husky install",
     "build": "pnpm exec parcel build src/manifest.json --dist-dir dist --no-content-hash --no-source-maps --no-cache --detailed-report 0",
     "watch": "pnpm exec parcel watch src/manifest.json --dist-dir dist"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "lint-staged": {
+    "**/*.ts": [
+      "prettier --write"
+    ]
+  },
+  "renovate": {
+    "extends": [
+        "config:recommended"
+    ]
+  },
   "devDependencies": {
     "@types/chrome": "^0.0.267",
     "@types/node": "^20.12.8",

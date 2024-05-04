@@ -11,13 +11,12 @@ const puppeteer = require('puppeteer');
   });
 
   try {
-    // Wait for the service worker to be registered by the extension
-    const serviceWorkerTarget = await browser.waitForTarget(target => target.type() === 'service_worker', { timeout: 10000 });
+    // Get all active service workers
+    const workers = await browser.serviceWorkers();
+    // Find our extension's service worker
+    const extensionWorker = workers.find(worker => worker.url.includes('dist'));
 
-    // Access the service worker of the extension
-    const serviceWorker = await serviceWorkerTarget.worker();
-
-    if (serviceWorker) {
+    if (extensionWorker) {
       console.log('Extension loaded successfully.');
       // Perform additional checks here
     } else {

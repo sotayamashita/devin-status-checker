@@ -25,6 +25,8 @@ jobs:
       run: echo "PATH=$PATH"
     - name: Check pnpm file mode
       run: ls -l $(which pnpm)
+    - name: Print pnpm version
+      run: pnpm --version
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Type check

@@ -9,20 +9,23 @@ const puppeteer = require('puppeteer');
     ]
   });
 
-  // Wait for the background page to be created by the extension
-  await browser.waitForTarget(target => target.type() === 'background_page');
+  try {
+    // Wait for the background page to be created by the extension
+    const backgroundPageTarget = await browser.waitForTarget(target => target.type() === 'background_page', { timeout: 10000 });
 
-  // Access the background page of the extension
-  const backgroundPageTarget = browser.targets().find(target => target.type() === 'background_page');
-  const backgroundPage = await backgroundPageTarget.page();
+    // Access the background page of the extension
+    const backgroundPage = await backgroundPageTarget.page();
 
-  if (backgroundPage) {
-    console.log('Extension loaded successfully.');
-    // Perform additional checks here
-  } else {
-    console.error('Failed to load the extension.');
+    if (backgroundPage) {
+      console.log('Extension loaded successfully.');
+      // Perform additional checks here
+    } else {
+      throw new Error('Failed to load the extension.');
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
     process.exit(1); // Exit with an error code
+  } finally {
+    await browser.close(); // Close the browser when done
   }
-
-  await browser.close(); // Close the browser when done
 })();

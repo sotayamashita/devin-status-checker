@@ -29,11 +29,11 @@ jobs:
       run: ls -l $(which pnpm)
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+    - name: Type check
+      run: pnpm run type-check
     - name: Run build
       run: pnpm run build
     - name: Install Playwright browser
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: pnpm test
-    - name: Type check
-      run: pnpm run type-check

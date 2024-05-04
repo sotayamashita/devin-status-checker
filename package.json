@@ -1,12 +1,15 @@
 {
   "private": true,
   "name": "devin-status-checker",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "scripts": {
-    "test": "node test-extension.js",
     "prepare": "husky install",
-    "build": "parcel build src/manifest.json --dist-dir dist --no-content-hash --no-source-maps --no-cache --detailed-report 0",
-    "watch": "parcel watch src/manifest.json --dist-dir dist"
+    "build": "parcel build src/manifest.json --dist-dir dist --no-content-hash --no-source-maps --no-cache --detailed-report 0 --config @parcel/config-webextension",
+    "watch:ext": "parcel watch src/manifest.json --host localhost --config @parcel/config-webextension",
+    "watch:chrome": "web-ext run -t chromium"
+  },
+  "webExt": {
+    "sourceDir": "dist"
   },
   "lint-staged": {
     "**/*.ts": [
@@ -15,15 +18,17 @@
   },
   "renovate": {
     "extends": [
-        "config:recommended"
+      "config:recommended"
     ]
   },
   "devDependencies": {
+    "@parcel/config-webextension": "^2.12.0",
     "@types/chrome": "^0.0.267",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "parcel": "^2.12.0",
     "playwright": "^1.43.1",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "web-ext": "^7.11.0"
   }
 }

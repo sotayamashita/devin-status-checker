@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: true, // Run in headless mode
+    headless: false, // Run in non-headless mode
     args: [
       `--disable-extensions-except=${__dirname}/dist`, // Disable all extensions except the one being tested
       `--load-extension=${__dirname}/dist` // Load the extension
@@ -10,13 +10,13 @@ const puppeteer = require('puppeteer');
   });
 
   try {
-    // Wait for the background page to be created by the extension
-    const backgroundPageTarget = await browser.waitForTarget(target => target.type() === 'background_page', { timeout: 10000 });
+    // Wait for the service worker to be registered by the extension
+    const serviceWorkerTarget = await browser.waitForTarget(target => target.type() === 'service_worker', { timeout: 10000 });
 
-    // Access the background page of the extension
-    const backgroundPage = await backgroundPageTarget.page();
+    // Access the service worker of the extension
+    const serviceWorker = await serviceWorkerTarget.worker();
 
-    if (backgroundPage) {
+    if (serviceWorker) {
       console.log('Extension loaded successfully.');
       // Perform additional checks here
     } else {

@@ -9,7 +9,12 @@ const puppeteer = require('puppeteer');
     ]
   });
 
-  const backgroundPage = await browser.extensionBackgroundPage(); // Access the background page of the extension
+  // Wait for the background page to be created by the extension
+  await browser.waitForTarget(target => target.type() === 'background_page');
+
+  // Access the background page of the extension
+  const backgroundPageTarget = browser.targets().find(target => target.type() === 'background_page');
+  const backgroundPage = await backgroundPageTarget.page();
 
   if (backgroundPage) {
     console.log('Extension loaded successfully.');

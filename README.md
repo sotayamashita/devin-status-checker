@@ -1,6 +1,6 @@
 # Devin Status Checker
 
-[![Static Badge](https://img.shields.io/badge/Build%20with%20Devin-8A2BE2)](https://www.cognition-labs.com/introducing-devin)
+[![Static Badge](https://img.shields.io/badge/Build%20with%20Devin-8A2BE2)](https://www.cognition-labs.com/introducing-devin) ![CI](https://github.com/sotayamashita/devin-status-checker/actions/workflows/ci.yml/badge.svg)
 
 > This Chrome extension is designed to check the status of Devin sessions and notify the user accordingly.
 

@@ -30,7 +30,11 @@ const { chromium } = require('playwright');
     }
 
   } catch (error) {
-    console.error('Error:', error.message);
+    if (error instanceof Error) {
+      console.error('Error:', error.message);
+    } else {
+      console.error('An unknown error occurred');
+    }
     process.exit(1); // Exit with an error code
   } finally {
     await browser.close(); // Close the browser when done

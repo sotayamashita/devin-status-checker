@@ -22,35 +22,31 @@ document.addEventListener(
       checkDevinStatusButton.addEventListener(
         "click",
         function () {
-          browser.tabs.query(
-            { active: true, currentWindow: true },
-            function (tabs) {
-              var currentTab = tabs[0];
-              browser.scripting.executeScript(
-                {
-                  target: { tabId: currentTab.id },
-                  function: checkDevinStatus,
-                },
-                (injectionResults) => {
-                  for (const frameResult of injectionResults) {
-                    // Update the popup's content based on the Devin status
-                    const checkResultElement =
-                      document.getElementById("devin-check-result");
-                    if (checkResultElement) {
-                      checkResultElement.textContent = frameResult.result;
-                    }
-                    // If Devin is awaiting, send a notification
-                    if (frameResult.result === "Devin is waiting") {
-                      browser.runtime.sendMessage({
-                        action: "notify",
-                        message: "Devin is awaiting your response.",
-                      });
-                    }
+          browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+            var currentTab = tabs[0];
+            if (currentTab.id !== undefined) {
+              browser.scripting.executeScript({
+                target: { tabId: currentTab.id },
+                func: checkDevinStatus,
+              }).then((injectionResults) => {
+                for (const frameResult of injectionResults) {
+                  // Update the popup's content based on the Devin status
+                  const checkResultElement =
+                    document.getElementById("devin-check-result");
+                  if (checkResultElement) {
+                    checkResultElement.textContent = frameResult.result;
                   }
-                },
-              );
-            },
-          );
+                  // If Devin is awaiting, send a notification
+                  if (frameResult.result === "Devin is waiting") {
+                    browser.runtime.sendMessage({
+                      action: "notify",
+                      message: "Devin is awaiting your response.",
+                    });
+                  }
+                }
+              });
+            }
+          });
         },
         false,
       );

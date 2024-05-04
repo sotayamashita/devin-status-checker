@@ -35,3 +35,5 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: pnpm test
+    - name: Type check
+      run: pnpm run type-check

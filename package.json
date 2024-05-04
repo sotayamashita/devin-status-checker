@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/background.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test-extension.js",
     "prepare": "husky install",
     "build": "parcel build src/manifest.json --dist-dir dist --no-content-hash --no-source-maps --no-cache --detailed-report 0",
     "watch": "parcel watch src/manifest.json --dist-dir dist"
@@ -18,6 +18,7 @@
     "lint-staged": "^15.2.2",
     "parcel": "^2.12.0",
     "prettier": "^3.2.5",
+    "puppeteer": "^22.7.1",
     "typescript": "^5.4.5"
   }
 }

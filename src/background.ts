@@ -1,16 +1,17 @@
-import * as browser from "webextension-polyfill";
+import browser from 'webextension-polyfill';
 
-browser.runtime.onInstalled.addListener(function () {
-  console.log("The extension has been installed.");
+// Listener for when the extension is installed
+browser.runtime.onInstalled.addListener(() => {
+  console.log('The extension has been installed.');
 });
 
 // Set up an alarm to check Devin's status periodically
-browser.alarms.create("checkDevinStatusBackground", { periodInMinutes: 1 });
+browser.alarms.create('checkDevinStatusBackground', { periodInMinutes: 1 });
 
 // Listener for the alarm to check Devin's status
 // This alarm triggers every minute to check if Devin's status is 'waiting'
 browser.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "checkDevinStatusBackground") {
+  if (alarm.name === 'checkDevinStatusBackground') {
     // Query all tabs that match Devin's URL pattern
     browser.tabs.query({ url: "https://preview.devin.ai/devin/*" }).then((tabs) => {
       // For each tab, execute the checkDevinStatusBackground script
@@ -27,9 +28,9 @@ browser.alarms.onAlarm.addListener((alarm) => {
               if (frameResult.result === "Devin is waiting") {
                 browser.notifications.create({
                   type: "basic",
-                  iconUrl: "icon.png",
+                  iconUrl: browser.runtime.getURL('icon.png'),
                   title: "Devin Status",
-                  message: "Devin is awaiting your response.",
+                  message: "Devin is awaiting your response."
                 });
               }
             }
@@ -47,12 +48,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Define the notification options
     const options: browser.Notifications.CreateNotificationOptions = {
       type: "basic",
-      iconUrl: "icon.png",
+      iconUrl: browser.runtime.getURL('icon.png'),
       title: "Notification from Devin",
-      message: request.message || "Notification triggered",
+      message: typeof request.message === 'string' ? request.message : "Notification triggered"
     };
     // Create the notification with the defined options
-    browser.notifications.create(options);
+    browser.notifications.create('', options);
   }
 });
 
@@ -81,12 +82,11 @@ browser.notifications.onButtonClicked.addListener((notificationId, buttonIndex) 
 });
 
 // Function to be injected into the current tab to check Devin status
-// This function checks the status bar message for the text 'Devin is awaiting'
 function checkDevinStatusBackground() {
   const statusBarMessage = document.querySelector(".status-bar--message");
   if (statusBarMessage) {
     // Retrieve the text content of the status bar message
-    const messageText = statusBarMessage.textContent; // Removed innerText
+    const messageText = statusBarMessage.textContent;
     // If the message indicates Devin is awaiting, return 'Devin is waiting'
     if (messageText && messageText.startsWith("Devin is awaiting")) {
       return "Devin is waiting";

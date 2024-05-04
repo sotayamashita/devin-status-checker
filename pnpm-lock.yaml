@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      webextension-polyfill:
+        specifier: ^0.11.0
+        version: 0.11.0
     devDependencies:
       '@parcel/config-webextension':
         specifier: ^2.12.0

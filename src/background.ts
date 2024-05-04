@@ -22,7 +22,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
                         for (const frameResult of injectionResults) {
                             // If Devin is waiting, create a notification
                             if (frameResult.result === 'Devin is waiting') {
-                                chrome.notifications.create('', {
+                                chrome.notifications.create({
                                     type: 'basic',
                                     iconUrl: 'icon.png',
                                     title: 'Devin Status',
@@ -53,7 +53,7 @@ chrome.runtime.onMessage.addListener(
                 ]
             };
             // Create the notification with the defined options
-            chrome.notifications.create('', options);
+            chrome.notifications.create(options);
         }
     }
 );

@@ -3,20 +3,20 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 // Set up an alarm to check Devin's status periodically
-chrome.alarms.create('checkDevinStatus', { periodInMinutes: 1 });
+chrome.alarms.create('checkDevinStatusBackground', { periodInMinutes: 1 });
 
 // Listener for the alarm to check Devin's status
 // This alarm triggers every minute to check if Devin's status is 'waiting'
 chrome.alarms.onAlarm.addListener(function(alarm) {
-    if (alarm.name === 'checkDevinStatus') {
+    if (alarm.name === 'checkDevinStatusBackground') {
         // Query all tabs that match Devin's URL pattern
         chrome.tabs.query({url: "https://preview.devin.ai/devin/*"}, function(tabs) {
-            // For each tab, execute the checkDevinStatus script
+            // For each tab, execute the checkDevinStatusBackground script
             tabs.forEach(function(tab) {
                 if (tab.id !== undefined) { // Ensure tab.id is defined
                     chrome.scripting.executeScript({
                         target: {tabId: tab.id},
-                        func: checkDevinStatus
+                        func: checkDevinStatusBackground
                     }, (injectionResults) => {
                         // Process the results of the script execution
                         for (const frameResult of injectionResults) {
@@ -80,7 +80,7 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
 
 // Function to be injected into the current tab to check Devin status
 // This function checks the status bar message for the text 'Devin is awaiting'
-function checkDevinStatus() {
+function checkDevinStatusBackground() {
     const statusBarMessage = document.querySelector('.status-bar--message');
     if (statusBarMessage) {
         // Retrieve the text content of the status bar message

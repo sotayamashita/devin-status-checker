@@ -14,6 +14,9 @@ importers:
       '@types/chrome':
         specifier: ^0.0.267
         version: 0.0.267
+      '@types/webextension-polyfill':
+        specifier: ^0.10.7
+        version: 0.10.7
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -627,6 +630,9 @@ packages:
 
   '@types/node@20.12.8':
     resolution: {integrity: sha512-NU0rJLJnshZWdE/097cdCBbyW1h4hEg0xpovcoAQYHl8dnEyp/NAOiE45pvc+Bd1Dt+2r94v2eGFpQJ4R7g+2w==}
+
+  '@types/webextension-polyfill@0.10.7':
+    resolution: {integrity: sha512-10ql7A0qzBmFB+F+qAke/nP1PIonS0TXZAOMVOxEUsm+lGSW6uwVcISFNa0I4Oyj0884TZVWGGMIWeXOVSNFHw==}
 
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
@@ -3651,6 +3657,8 @@ snapshots:
   '@types/node@20.12.8':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/webextension-polyfill@0.10.7': {}
 
   '@types/yauzl@2.10.3':
     dependencies:

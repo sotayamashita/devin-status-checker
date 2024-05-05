@@ -34,5 +34,9 @@
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "web-ext": "^7.11.0"
+  },
+  "dependencies": {
+    "@types/webextension-polyfill": "^0.10.7",
+    "webextension-polyfill": "^0.11.0"
   }
 }

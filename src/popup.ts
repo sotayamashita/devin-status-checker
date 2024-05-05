@@ -4,7 +4,7 @@ document.addEventListener(
   "DOMContentLoaded",
   function () {
     // Event listener for the send notification button
-    var notifyButton = document.getElementById("send-notification");
+    const notifyButton = document.getElementById("send-notification");
     if (notifyButton) {
       notifyButton.addEventListener(
         "click",
@@ -17,7 +17,8 @@ document.addEventListener(
     }
 
     // Event listener for the check Devin status button
-    var checkDevinStatusButton = document.getElementById("check-devin-status");
+    const checkDevinStatusButton =
+      document.getElementById("check-devin-status");
     if (checkDevinStatusButton) {
       checkDevinStatusButton.addEventListener(
         "click",
@@ -25,7 +26,7 @@ document.addEventListener(
           browser.tabs
             .query({ active: true, currentWindow: true })
             .then(function (tabs) {
-              var currentTab = tabs[0];
+              const currentTab = tabs[0];
               if (currentTab.id !== undefined) {
                 browser.scripting
                   .executeScript({

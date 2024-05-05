@@ -49,7 +49,7 @@ browser.alarms.onAlarm.addListener(function (alarm) {
 browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action == "notify") {
     // Define the notification options
-    let options = {
+    const options = {
       type: "basic" as const, // Ensure type is a specific string literal 'basic'
       iconUrl: browser.runtime.getURL("icon.png"), // Ensure iconUrl is always a string
       title: "Notification from Devin",
@@ -70,15 +70,15 @@ browser.notifications.onButtonClicked.addListener(
       browser.tabs
         .query({ active: true, currentWindow: true })
         .then(function (tabs) {
-          var currentTab = tabs[0];
+          const currentTab = tabs[0];
           if (currentTab && currentTab.url) {
             // Ensure currentTab and currentTab.url are defined
             // Extract the session ID from the current tab URL
-            var sessionIdMatch = currentTab.url.match(
+            const sessionIdMatch = currentTab.url.match(
               /devin\/([a-zA-Z0-9?&=]+)/,
             );
             if (sessionIdMatch && sessionIdMatch.length > 1) {
-              var sessionId = sessionIdMatch[1];
+              const sessionId = sessionIdMatch[1];
               // Open the Devin session URL in a new tab
               browser.tabs.create({
                 url: `https://preview.devin.ai/devin/${sessionId}`,

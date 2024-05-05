@@ -8,7 +8,7 @@
     "watch:ext": "parcel watch src/manifest.json --host localhost --config @parcel/config-webextension",
     "watch:chrome": "web-ext run -t chromium --chromium-binary=/usr/bin/chromium-browser",
     "type-check": "tsc --noEmit",
-    "test": "playwright test tests/"
+    "test": "playwright test \"tests/\""
   },
   "webExt": {
     "sourceDir": "dist"

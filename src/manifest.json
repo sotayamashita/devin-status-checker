@@ -16,7 +16,7 @@
     "https://preview.devin.ai/devin/*"
   ],
   "background": {
-    "service_worker": "background.ts",
+    "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [

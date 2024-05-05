@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Before the Devin Status Checker extension, users had to manually monitor their Devin AI sessions, often switching back and forth between tasks to check if Devin was waiting for input. This was little bit inefficient. 
+Before the Devin Status Checker extension, users had to manually monitor their Devin AI sessions, often switching back and forth between tasks to check if Devin was waiting for input. This was little bit inefficient.
 
 To address this, the Devin Status Checker Chrome extension was developed. It automates the monitoring process by checking the status of Devin sessions in the background. When Devin's status changes to 'Devin is awaiting', the extension sends an immediate notification. This allows users to focus on other tasks with the assurance that they won't miss the moment Devin requires their attention. By streamlining this process, the extension enhances productivity and integrates AI assistance into the user's multitasking routine seamlessly.
 
@@ -14,3 +14,32 @@ To address this, the Devin Status Checker Chrome extension was developed. It aut
 
 - Automatic checking of Devin status at regular intervals.
 - Notifications to alert the user when Devin is awaiting their input.
+
+## How to Install Extension
+
+Since there are no releases available for download, you can install the Devin Status Checker extension by cloning the repository and building the extension manually. Follow these steps:
+
+1. Clone the repository to your local machine using `git clone https://github.com/sotayamashita/devin-status-checker.git`.
+2. Navigate to the cloned directory and run `pnpm install` to install the necessary dependencies.
+3. Build the extension by running `pnpm run build`.
+4. Open the Chrome browser and navigate to `chrome://extensions/`.
+5. Enable 'Developer mode' by toggling the switch in the top right corner.
+6. Click on 'Load unpacked' and select the `dist` directory from the cloned repository.
+7. The extension should now be installed and will appear in your list of extensions.
+
+## Troubleshooting
+
+If you encounter issues with the Devin Status Checker extension, such as notifications not being sent, follow these troubleshooting steps:
+
+1. **Check Devin Session Status**:
+   - Ensure that you are in a Devin session and that the Devin start message begins with "Devin is awaiting".
+
+2. **Check macOS Notification Settings** (if applicable):
+   - Go to 'System Preferences' > 'Notifications'.
+   - Find the browser you are using in the list and make sure notifications are allowed.
+
+3. **Check Browser Notification Settings**:
+   - In Chrome, go to `chrome://settings/content/notifications`.
+   - Ensure that the site `https://preview.devin.ai` is allowed to send notifications.
+
+If you have followed these steps and are still experiencing issues, please file an issue on the [GitHub repository](https://github.com/sotayamashita/devin-status-checker/issues) with detailed information about the problem.

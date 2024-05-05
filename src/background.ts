@@ -1,5 +1,16 @@
 import * as browser from "webextension-polyfill";
 
+// Define types for messages and alarms
+type MessageRequest = {
+  action: string;
+  message?: string;
+};
+
+type AlarmInfo = {
+  name: string;
+};
+
+// Listener for the extension installation event
 browser.runtime.onInstalled.addListener(function () {
   console.log("The extension has been installed.");
 });
@@ -9,7 +20,7 @@ browser.alarms.create("checkDevinStatusBackground", { periodInMinutes: 1 });
 
 // Listener for the alarm to check Devin's status
 // This alarm triggers every minute to check if Devin's status is 'waiting'
-browser.alarms.onAlarm.addListener(async function (alarm) {
+browser.alarms.onAlarm.addListener(async function (alarm: AlarmInfo) {
   if (alarm.name === "checkDevinStatusBackground") {
     // Query all tabs that match Devin's URL pattern
     try {
@@ -50,7 +61,11 @@ browser.alarms.onAlarm.addListener(async function (alarm) {
 
 // Listener for messages from the popup script
 // This allows the popup to send notifications on demand
-browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function (
+  request: MessageRequest,
+  sender: browser.Runtime.MessageSender,
+  sendResponse: (response?: any) => void
+) {
   if (request.action == "notify") {
     // Define the notification options
     const options = {
@@ -67,7 +82,10 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 // Listener for notification button click
 // This provides a quick way for the user to navigate to the Devin session
 browser.notifications.onButtonClicked.addListener(
-  async function (notificationId, buttonIndex) {
+  async function (
+    notificationId: string,
+    buttonIndex: number
+  ) {
     if (buttonIndex === 0) {
       // 'Check' button index
       // Query the active tab in the current window
@@ -106,7 +124,7 @@ function checkDevinStatusBackground() {
     // Retrieve the text content of the status bar message
     const messageText = statusBarMessage.textContent; // Removed innerText
     // If the message indicates Devin is awaiting, return 'Devin is waiting'
-    if (messageText && messageText.startsWith("Devin is awaiting")) {
+    if (messageText && messageText.includes("Devin is awaiting")) {
       return "Devin is waiting";
     }
   }

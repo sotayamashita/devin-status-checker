@@ -9,38 +9,42 @@ browser.alarms.create("checkDevinStatusBackground", { periodInMinutes: 1 });
 
 // Listener for the alarm to check Devin's status
 // This alarm triggers every minute to check if Devin's status is 'waiting'
-browser.alarms.onAlarm.addListener(function (alarm) {
+browser.alarms.onAlarm.addListener(async function (alarm) {
   if (alarm.name === "checkDevinStatusBackground") {
     // Query all tabs that match Devin's URL pattern
-    browser.tabs
-      .query({ url: "https://preview.devin.ai/devin/*" })
-      .then(function (tabs) {
-        // For each tab, execute the checkDevinStatusBackground script
-        tabs.forEach(function (tab) {
-          if (tab.id !== undefined) {
-            // Ensure tab.id is defined
-            browser.scripting
-              .executeScript({
-                target: { tabId: tab.id },
-                func: checkDevinStatusBackground,
-              })
-              .then((injectionResults) => {
-                // Process the results of the script execution
-                for (const frameResult of injectionResults) {
-                  // If Devin is waiting, create a notification
-                  if (frameResult.result === "Devin is waiting") {
-                    browser.notifications.create({
-                      type: "basic",
-                      iconUrl: browser.runtime.getURL("icon.png"),
-                      title: "Devin Status",
-                      message: "Devin is awaiting your response.",
-                    });
-                  }
-                }
-              });
-          }
-        });
+    try {
+      const tabs = await browser.tabs.query({
+        url: "https://preview.devin.ai/devin/*",
       });
+      // For each tab, execute the checkDevinStatusBackground script
+      for (const tab of tabs) {
+        if (tab.id !== undefined) {
+          // Ensure tab.id is defined
+          try {
+            const injectionResults = await browser.scripting.executeScript({
+              target: { tabId: tab.id },
+              func: checkDevinStatusBackground,
+            });
+            // Process the results of the script execution
+            for (const frameResult of injectionResults) {
+              // If Devin is waiting, create a notification
+              if (frameResult.result === "Devin is waiting") {
+                await browser.notifications.create({
+                  type: "basic",
+                  iconUrl: browser.runtime.getURL("icon.png"),
+                  title: "Devin Status",
+                  message: "Devin is awaiting your response.",
+                });
+              }
+            }
+          } catch (error) {
+            console.error(`Error executing script in tab ${tab.id}: ${error}`);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`Error querying tabs: ${error}`);
+    }
   }
 });
 
@@ -63,29 +67,33 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 // Listener for notification button click
 // This provides a quick way for the user to navigate to the Devin session
 browser.notifications.onButtonClicked.addListener(
-  function (notificationId, buttonIndex) {
+  async function (notificationId, buttonIndex) {
     if (buttonIndex === 0) {
       // 'Check' button index
       // Query the active tab in the current window
-      browser.tabs
-        .query({ active: true, currentWindow: true })
-        .then(function (tabs) {
-          const currentTab = tabs[0];
-          if (currentTab && currentTab.url) {
-            // Ensure currentTab and currentTab.url are defined
-            // Extract the session ID from the current tab URL
-            const sessionIdMatch = currentTab.url.match(
-              /devin\/([a-zA-Z0-9?&=]+)/,
-            );
-            if (sessionIdMatch && sessionIdMatch.length > 1) {
-              const sessionId = sessionIdMatch[1];
-              // Open the Devin session URL in a new tab
-              browser.tabs.create({
-                url: `https://preview.devin.ai/devin/${sessionId}`,
-              });
-            }
-          }
+      try {
+        const tabs = await browser.tabs.query({
+          active: true,
+          currentWindow: true,
         });
+        const currentTab = tabs[0];
+        if (currentTab && currentTab.url) {
+          // Ensure currentTab and currentTab.url are defined
+          // Extract the session ID from the current tab URL
+          const sessionIdMatch = currentTab.url.match(
+            /devin\/([a-zA-Z0-9?&=]+)/,
+          );
+          if (sessionIdMatch && sessionIdMatch.length > 1) {
+            const sessionId = sessionIdMatch[1];
+            // Open the Devin session URL in a new tab
+            await browser.tabs.create({
+              url: `https://preview.devin.ai/devin/${sessionId}`,
+            });
+          }
+        }
+      } catch (error) {
+        console.error(`Error querying active tab: ${error}`);
+      }
     }
   },
 );

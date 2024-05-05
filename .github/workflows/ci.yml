@@ -29,6 +29,8 @@ jobs:
       run: ls -l $(which pnpm)
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+    - name: Type check
+      run: pnpm run type-check
     - name: Run build
       run: pnpm run build
     - name: Install Playwright browser

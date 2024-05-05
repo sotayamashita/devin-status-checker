@@ -21,6 +21,9 @@ importers:
       '@parcel/config-webextension':
         specifier: ^2.12.0
         version: 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)(postcss@8.4.33)(srcset@4.0.0)(terser@5.31.0)(typescript@5.4.5)
+      '@parcel/transformer-js':
+        specifier: ^2.12.0
+        version: 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
       '@types/chrome':
         specifier: ^0.0.267
         version: 0.0.267

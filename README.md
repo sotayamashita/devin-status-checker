@@ -17,7 +17,7 @@ To address this, the Devin Status Checker Chrome extension was developed. It aut
 
 ## How to Install Extension
 
-To install the Devin Status Checker extension, follow these steps:
+Since there are no releases available for download, you can install the Devin Status Checker extension by cloning the repository and building the extension manually. Follow these steps:
 
 1. Clone the repository to your local machine using `git clone https://github.com/sotayamashita/devin-status-checker.git`.
 2. Navigate to the cloned directory and run `pnpm install` to install the necessary dependencies.

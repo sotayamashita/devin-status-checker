@@ -2,6 +2,7 @@
   "private": true,
   "name": "devin-status-checker",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "prepare": "husky install",
     "build": "parcel build src/manifest.json --dist-dir dist --no-content-hash --no-source-maps --no-cache --detailed-report 0 --config @parcel/config-webextension",

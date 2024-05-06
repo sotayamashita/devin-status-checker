@@ -14,7 +14,7 @@ To address this, the Devin Status Checker Chrome extension was developed. It aut
 
 - Automatic checking of Devin status at regular intervals.
 - Notifications to alert the user when Devin is awaiting their input.
-- A toggle switch in the popup to enable or disable notifications. This setting is saved and will persist across browser sessions.
+- A toggle switch to enable/disable notifications. This setting is saved and persists across sessions.
 
 ## Installation
 

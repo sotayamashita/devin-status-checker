@@ -15,9 +15,7 @@
     "declarativeNetRequestFeedback"
   ],
 
-  "host_permissions": [
-    "https://preview.devin.ai/devin/*"
-  ],
+  "host_permissions": ["https://preview.devin.ai/devin/*"],
 
   "background": {
     "service_worker": "background.js"

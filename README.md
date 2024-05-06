@@ -32,12 +32,12 @@ If you encounter issues with the Devin Status Checker extension, such as notific
 1. **Check Devin Session Status**:
    - Ensure that you are in a Devin session and that the Devin start message begins with "Devin is awaiting".
 
-2. **Check macOS Notification Settings** (if applicable):
+2. **Check Browser Notification Settings**:
+   - In Chrome, go to `chrome://settings/content/siteDetails?site=https%3A%2F%2Fpreview.devin.ai`.
+   - Ensure that the site `https://preview.devin.ai` is allowed to send notifications.
+
+3. **Check macOS Notification Settings** (if applicable):
    - Go to 'System Preferences' > 'Notifications'.
    - Find the browser you are using in the list and make sure notifications are allowed.
-
-3. **Check Browser Notification Settings**:
-   - In Chrome, go to `chrome://settings/content/notifications`.
-   - Ensure that the site `https://preview.devin.ai` is allowed to send notifications.
 
 If you have followed these steps and are still experiencing issues, please file an issue on the [GitHub repository](https://github.com/sotayamashita/devin-status-checker/issues) with detailed information about the problem.

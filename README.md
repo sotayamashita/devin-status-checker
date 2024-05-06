@@ -27,3 +27,19 @@ Since there are no releases available for download, you can install the Devin St
 6. Click on 'Load unpacked' and select the `dist` directory from the cloned repository.
 7. The extension should now be installed and will appear in your list of extensions.
 
+## Troubleshooting
+
+If you encounter issues with the Devin Status Checker extension, such as notifications not being sent, try the following troubleshooting steps:
+
+1. **Check Devin Session Status**:
+   - Ensure that you are in a Devin session and that the Devin start message begins with "Devin is awaiting".
+
+2. **Check Browser Notification Settings**:
+   - In Chrome, go to `chrome://settings/content/siteDetails?site={Devin app url}`.
+   - Ensure that the site `{Devin app url}` is allowed to send notifications.
+
+3. **Check macOS Notification Settings** (if applicable):
+   - Go to 'System Preferences' > 'Notifications'.
+   - Find the browser you are using in the list and make sure notifications are allowed.
+
+If you have followed these steps and are still experiencing issues, please file an issue with detailed information about the problem.

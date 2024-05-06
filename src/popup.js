@@ -60,8 +60,14 @@ document.addEventListener(
 
     // Retrieve the current state of the notification toggle from storage
     const notificationToggle = document.getElementById("toggle");
+    // Initialize the notificationsEnabled state if it's not set
     chrome.storage.sync.get(["notificationsEnabled"], function (result) {
-      notificationToggle.checked = result.notificationsEnabled !== false;
+      if (typeof result.notificationsEnabled === "undefined") {
+        chrome.storage.sync.set({ notificationsEnabled: true });
+        notificationToggle.checked = true;
+      } else {
+        notificationToggle.checked = result.notificationsEnabled;
+      }
     });
 
     // Event listener for the notification toggle

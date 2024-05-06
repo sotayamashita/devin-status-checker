@@ -15,11 +15,11 @@ To address this, the Devin Status Checker Chrome extension was developed. It aut
 - Automatic checking of Devin status at regular intervals.
 - Notifications to alert the user when Devin is awaiting their input.
 
-## How to Install Extension
+## Install Extension
 
 Since there are no releases available for download, you can install the Devin Status Checker extension by cloning the repository and building the extension manually. Follow these steps:
 
-1. Clone the repository to your local machine using `git clone https://github.com/sotayamashita/devin-status-checker.git`.
+1. Clone the repository
 1. Open the Chrome browser and navigate to `chrome://extensions/`.
 1. Enable 'Developer mode' by toggling the switch in the top right corner.
 1. Click on 'Load unpacked' and select the `dist` directory from the cloned repository.

@@ -27,7 +27,7 @@ Since there are no releases available for download, you can install the Devin St
 
 ## Troubleshooting
 
-If you encounter issues with the Devin Status Checker extension, such as notifications not being sent, follow these troubleshooting steps:
+If you encounter issues with the Devin Status Checker extension, such as notifications not being sent, try the following troubleshooting steps:
 
 1. **Check Devin Session Status**:
    - Ensure that you are in a Devin session and that the Devin start message begins with "Devin is awaiting".

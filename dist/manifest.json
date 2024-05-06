@@ -12,7 +12,8 @@
     "scripting",
     "notifications",
     "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "declarativeNetRequestFeedback",
+    "alarms"
   ],
 
   "host_permissions": ["https://preview.devin.ai/devin/*"],

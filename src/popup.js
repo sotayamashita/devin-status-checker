@@ -59,16 +59,81 @@ document.addEventListener(
     }
 
     // Retrieve the current state of the notification toggle from storage
-    const notificationToggle = document.getElementById("toggle");
+    // and update the toggle button's appearance based on the stored value
+    const notificationToggleButton = document.querySelector("[role='switch']");
     chrome.storage.sync.get(["notificationsEnabled"], function (result) {
-      notificationToggle.checked = result.notificationsEnabled !== false;
+      const isEnabled = result.notificationsEnabled !== false;
+      notificationToggleButton.setAttribute("aria-checked", isEnabled);
+      if (isEnabled) {
+        notificationToggleButton.classList.replace(
+          "bg-gray-200",
+          "bg-indigo-600",
+        );
+        notificationToggleButton
+          .querySelector(".translate-x-0")
+          .classList.replace("translate-x-0", "translate-x-5");
+        notificationToggleButton
+          .querySelector(".opacity-100")
+          .classList.replace("opacity-100", "opacity-0");
+        notificationToggleButton
+          .querySelector(".opacity-0")
+          .classList.replace("opacity-0", "opacity-100");
+      } else {
+        notificationToggleButton.classList.replace(
+          "bg-indigo-600",
+          "bg-gray-200",
+        );
+        notificationToggleButton
+          .querySelector(".translate-x-5")
+          .classList.replace("translate-x-5", "translate-x-0");
+        notificationToggleButton
+          .querySelector(".opacity-0")
+          .classList.replace("opacity-0", "opacity-100");
+        notificationToggleButton
+          .querySelector(".opacity-100")
+          .classList.replace("opacity-100", "opacity-0");
+      }
     });
 
-    // Event listener for the notification toggle
-    notificationToggle.addEventListener("change", function () {
+    // Event listener for the notification toggle button
+    notificationToggleButton.addEventListener("click", function () {
+      const currentState =
+        notificationToggleButton.getAttribute("aria-checked") === "true";
+      // Toggle the state
+      const newState = !currentState;
+      notificationToggleButton.setAttribute("aria-checked", newState);
+      if (newState) {
+        notificationToggleButton.classList.replace(
+          "bg-gray-200",
+          "bg-indigo-600",
+        );
+        notificationToggleButton
+          .querySelector(".translate-x-0")
+          .classList.replace("translate-x-0", "translate-x-5");
+        notificationToggleButton
+          .querySelector(".opacity-100")
+          .classList.replace("opacity-100", "opacity-0");
+        notificationToggleButton
+          .querySelector(".opacity-0")
+          .classList.replace("opacity-0", "opacity-100");
+      } else {
+        notificationToggleButton.classList.replace(
+          "bg-indigo-600",
+          "bg-gray-200",
+        );
+        notificationToggleButton
+          .querySelector(".translate-x-5")
+          .classList.replace("translate-x-5", "translate-x-0");
+        notificationToggleButton
+          .querySelector(".opacity-0")
+          .classList.replace("opacity-0", "opacity-100");
+        notificationToggleButton
+          .querySelector(".opacity-100")
+          .classList.replace("opacity-100", "opacity-0");
+      }
       // Update the stored state when the toggle is clicked
       chrome.storage.sync.set({
-        notificationsEnabled: notificationToggle.checked,
+        notificationsEnabled: newState,
       });
     });
   },

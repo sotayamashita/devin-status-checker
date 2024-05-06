@@ -22,13 +22,6 @@
     "service_worker": "background.js"
   },
 
-  "content_scripts": [
-    {
-      "matches": ["https://preview.devin.ai/devin/*"],
-      "js": ["popup.js"]
-    }
-  ],
-
   "declarative_net_request": {
     "rule_resources": [
       {

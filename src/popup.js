@@ -57,6 +57,20 @@ document.addEventListener(
       }
       return "Devin is not awaiting";
     }
+
+    // Retrieve the current state of the notification toggle from storage
+    const notificationToggle = document.getElementById("toggle");
+    chrome.storage.sync.get(["notificationsEnabled"], function (result) {
+      notificationToggle.checked = result.notificationsEnabled !== false;
+    });
+
+    // Event listener for the notification toggle
+    notificationToggle.addEventListener("change", function () {
+      // Update the stored state when the toggle is clicked
+      chrome.storage.sync.set({
+        notificationsEnabled: notificationToggle.checked,
+      });
+    });
   },
   false,
 );

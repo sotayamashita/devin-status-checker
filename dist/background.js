@@ -54,11 +54,11 @@ chrome.runtime.onMessage.addListener(
 chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
     if (buttonIndex === 0) { // 'Check' button index
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            var currentTab = tabs[0];
+            const currentTab = tabs[0];
             // Extract the session ID from the current tab URL
-            var sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
+            const sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
             if (sessionIdMatch && sessionIdMatch.length > 1) {
-                var sessionId = sessionIdMatch[1];
+                const sessionId = sessionIdMatch[1];
                 // Open the Devin session URL in a new tab
                 chrome.tabs.create({url: `https://preview.devin.ai/devin/${sessionId}`});
             }

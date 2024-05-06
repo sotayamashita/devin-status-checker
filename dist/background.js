@@ -1,0 +1,79 @@
+chrome.runtime.onInstalled.addListener(function() {
+    console.log('The extension has been installed.');
+});
+
+// Set up an alarm to check Devin's status periodically
+chrome.alarms.create('checkDevinStatus', { periodInMinutes: 1 });
+
+// Listener for the alarm to check Devin's status
+chrome.alarms.onAlarm.addListener(function(alarm) {
+    if (alarm.name === 'checkDevinStatus') {
+        chrome.tabs.query({url: "https://preview.devin.ai/devin/*"}, (tabs) => {
+            tabs.forEach(function(tab) {
+                chrome.scripting.executeScript({
+                    target: {tabId: tab.id},
+                    function: checkDevinStatus
+                }, (injectionResults) => {
+                    for (const frameResult of injectionResults) {
+                        if (frameResult.result === 'Devin is waiting') {
+                            chrome.notifications.create({
+                                type: 'basic',
+                                iconUrl: 'icon.png',
+                                title: 'Devin Status',
+                                message: 'Devin is awaiting your response.'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    }
+});
+
+// Listener for messages from the popup script
+chrome.runtime.onMessage.addListener(
+    (request, sender, sendResponse) => {
+        if (request.action == "notify") {
+            // Define the notification options
+            let options = {
+                type: 'basic',
+                iconUrl: 'icon.png',
+                title: 'Notification from Devin',
+                message: request.message || "Notification triggered",
+                buttons: [
+                    {title: "Check"}
+                ]
+            };
+            // Create the notification
+            chrome.notifications.create(options);
+        }
+    }
+);
+
+// Listener for notification button click
+chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
+    if (buttonIndex === 0) { // 'Check' button index
+        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            var currentTab = tabs[0];
+            // Extract the session ID from the current tab URL
+            var sessionIdMatch = currentTab.url.match(/devin\/([a-zA-Z0-9?&=]+)/);
+            if (sessionIdMatch && sessionIdMatch.length > 1) {
+                var sessionId = sessionIdMatch[1];
+                // Open the Devin session URL in a new tab
+                chrome.tabs.create({url: `https://preview.devin.ai/devin/${sessionId}`});
+            }
+        });
+    }
+});
+
+// Function to be injected into the current tab to check Devin status
+function checkDevinStatus() {
+    const statusBarMessage = document.querySelector('.status-bar--message');
+    if (statusBarMessage) {
+        const messageText = statusBarMessage.textContent || statusBarMessage.innerText;
+        if (messageText.startsWith('Devin is awaiting')) {
+            return 'Devin is waiting';
+        }
+    }
+    return 'Devin is not awaiting';
+}

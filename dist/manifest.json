@@ -2,11 +2,9 @@
   "manifest_version": 3,
   "name": "Devin Status Checker",
   "version": "0.0.0",
-
   "action": {
     "default_popup": "popup.html"
   },
-
   "permissions": [
     "activeTab",
     "scripting",
@@ -15,20 +13,16 @@
     "declarativeNetRequestFeedback",
     "alarms"
   ],
-
   "host_permissions": ["https://preview.devin.ai/devin/*"],
-
   "background": {
     "service_worker": "background.js"
   },
-
   "content_scripts": [
     {
       "matches": ["https://preview.devin.ai/devin/*"],
       "js": ["popup.js"]
     }
   ],
-
   "declarative_net_request": {
     "rule_resources": [
       {
@@ -37,5 +31,8 @@
         "path": "rules.json"
       }
     ]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' https://cdn.tailwindcss.com; object-src 'self'"
   }
 }

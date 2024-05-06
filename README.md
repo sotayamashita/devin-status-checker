@@ -20,10 +20,13 @@ To address this, the Devin Status Checker Chrome extension was developed. It aut
 Since there are no releases available for download, you can install the Devin Status Checker extension by cloning the repository and building the extension manually. Follow these steps:
 
 1. Clone the repository
-2. Open the Chrome browser and navigate to `chrome://extensions/`.
-3. Enable 'Developer mode' by toggling the switch in the top right corner.
-4. Click on 'Load unpacked' and select the `dist` directory from the cloned repository.
-5. The extension should now be installed and will appear in your list of extensions.
+2. Navigate to the cloned directory and run `pnpm install` to install dependencies.
+3. Build the extension by running `pnpm run build`.
+4. Open the Chrome browser and navigate to `chrome://extensions/`.
+5. Enable 'Developer mode' by toggling the switch in the top right corner.
+6. Click on 'Load unpacked' and select the `dist` directory from the cloned repository.
+7. The extension should now be installed and will appear in your list of extensions.
+
 
 ## Troubleshooting
 

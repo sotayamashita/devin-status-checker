@@ -33,6 +33,6 @@
     ]
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "extension_pages": "script-src 'self' 'sha256-+ep8ZxM6VQiVt7/1KZ6N2V7SeG9OxS7WVg2ea+3dXp0='; object-src 'self'"
   }
 }

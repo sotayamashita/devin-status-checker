@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       type: "basic",
       iconUrl: "icon.png",
       title: "Notification from Devin",
-      message: request.message || "Notification triggered",
+      message: request.message || "Notification triggered manually",
       buttons: [{ title: "Check" }],
     };
     // Create the notification

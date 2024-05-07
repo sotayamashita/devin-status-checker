@@ -6,7 +6,8 @@ This Chrome extension is designed to check the status of Devin sessions and noti
 
 ## Motivation
 
-**🙌 Heads up! Devin has a built-in feature that you can use.** I continue to update it for practice.
+> [!Note]
+> **🙌 Heads up! Devin has a built-in feature that you can use.** I continue to update it for practice.
 
 ~~Before the Devin Status Checker extension, users had to manually monitor their Devin AI sessions, often switching back and forth between tasks to check if Devin was waiting for input. This was a bit inefficient.~~
 

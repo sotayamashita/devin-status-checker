@@ -17,17 +17,20 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
           },
           (injectionResults) => {
             for (const frameResult of injectionResults) {
-              if (frameResult.result === "Devin is waiting") {
+              if (frameResult.result.status === "Devin is waiting") {
                 // Retrieve the last notification time for the current tab from storage
                 chrome.storage.local.get(
                   `lastNotificationTime_${tab.id}`,
                   function (data) {
                     const currentTime = new Date().getTime();
-                    // Check if the current time is different from the last stored time for this tab
+                    // Parse the last message time from the result
+                    const lastMessageTime = Date.parse(
+                      frameResult.result.lastMessageTime,
+                    );
+                    // Check if the current time is different from the last message time for this tab
                     if (
                       !data[`lastNotificationTime_${tab.id}`] ||
-                      currentTime - data[`lastNotificationTime_${tab.id}`] >
-                        60000
+                      currentTime - lastMessageTime > 60000
                     ) {
                       // Update the storage with the current time for this tab
                       let tabData = {};
@@ -96,8 +99,24 @@ function checkDevinStatus() {
     const messageText =
       statusBarMessage.textContent || statusBarMessage.innerText;
     if (messageText.startsWith("Devin is awaiting")) {
-      return "Devin is waiting";
+      // Extract the last message time from the status bar
+      const lastMessageTime = statusBarMessage.querySelector(
+        "[data-state='closed']",
+      ).textContent;
+      // Format the last message time as "Mon 11:34 PM"
+      const formattedLastMessageTime = new Date(
+        lastMessageTime,
+      ).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        weekday: "short",
+      });
+      return {
+        status: "Devin is waiting",
+        lastMessageTime: formattedLastMessageTime,
+      };
     }
   }
-  return "Devin is not awaiting";
+  return { status: "Devin is not awaiting" };
 }

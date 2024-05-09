@@ -5,12 +5,6 @@ chrome.runtime.onInstalled.addListener(function () {
 // Set up an alarm to check Devin's status periodically
 chrome.alarms.create("checkDevinStatus", { periodInMinutes: 1 });
 
-// Initialize the storage for the last notification time and URL
-chrome.storage.local.set({
-  lastNotificationTime: null,
-  lastNotificationUrl: null,
-});
-
 // Listener for the alarm to check Devin's status
 chrome.alarms.onAlarm.addListener(function (alarm) {
   if (alarm.name === "checkDevinStatus") {
@@ -24,22 +18,21 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
           (injectionResults) => {
             for (const frameResult of injectionResults) {
               if (frameResult.result === "Devin is waiting") {
-                // Retrieve the last notification time and URL from storage
+                // Retrieve the last notification time for the current tab from storage
                 chrome.storage.local.get(
-                  ["lastNotificationTime", "lastNotificationUrl"],
+                  `lastNotificationTime_${tab.id}`,
                   function (data) {
                     const currentTime = new Date().getTime();
-                    const currentUrl = tab.url;
-                    // Check if the current URL and time are different from the last stored values
+                    // Check if the current time is different from the last stored time for this tab
                     if (
-                      data.lastNotificationUrl !== currentUrl ||
-                      currentTime - data.lastNotificationTime > 60000
+                      !data[`lastNotificationTime_${tab.id}`] ||
+                      currentTime - data[`lastNotificationTime_${tab.id}`] >
+                        60000
                     ) {
-                      // Update the storage with the current time and URL
-                      chrome.storage.local.set({
-                        lastNotificationTime: currentTime,
-                        lastNotificationUrl: currentUrl,
-                      });
+                      // Update the storage with the current time for this tab
+                      let tabData = {};
+                      tabData[`lastNotificationTime_${tab.id}`] = currentTime;
+                      chrome.storage.local.set(tabData);
                       // Create the notification
                       chrome.notifications.create({
                         type: "basic",

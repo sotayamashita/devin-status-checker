@@ -22,19 +22,20 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
                 chrome.storage.local.get(
                   `lastNotificationTime_${tab.id}`,
                   function (data) {
-                    const currentTime = new Date().getTime();
                     // Parse the last message time from the result
                     const lastMessageTime = Date.parse(
                       frameResult.result.lastMessageTime,
                     );
-                    // Check if the current time is different from the last message time for this tab
+                    // Check if the last message time is different from the last notification time for this tab
                     if (
                       !data[`lastNotificationTime_${tab.id}`] ||
-                      currentTime - lastMessageTime > 60000
+                      lastMessageTime.toString() !==
+                        data[`lastNotificationTime_${tab.id}`]
                     ) {
-                      // Update the storage with the current time for this tab
+                      // Update the storage with the last message time for this tab
                       let tabData = {};
-                      tabData[`lastNotificationTime_${tab.id}`] = currentTime;
+                      tabData[`lastNotificationTime_${tab.id}`] =
+                        lastMessageTime.toString();
                       chrome.storage.local.set(tabData);
                       // Create the notification
                       chrome.notifications.create({

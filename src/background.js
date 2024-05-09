@@ -5,6 +5,12 @@ chrome.runtime.onInstalled.addListener(function () {
 // Set up an alarm to check Devin's status periodically
 chrome.alarms.create("checkDevinStatus", { periodInMinutes: 1 });
 
+// Initialize the storage for the last notification time and URL
+chrome.storage.local.set({
+  lastNotificationTime: null,
+  lastNotificationUrl: null,
+});
+
 // Listener for the alarm to check Devin's status
 chrome.alarms.onAlarm.addListener(function (alarm) {
   if (alarm.name === "checkDevinStatus") {
@@ -18,12 +24,32 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
           (injectionResults) => {
             for (const frameResult of injectionResults) {
               if (frameResult.result === "Devin is waiting") {
-                chrome.notifications.create({
-                  type: "basic",
-                  iconUrl: "icon.png",
-                  title: "Devin Status",
-                  message: "Devin is awaiting your response.",
-                });
+                // Retrieve the last notification time and URL from storage
+                chrome.storage.local.get(
+                  ["lastNotificationTime", "lastNotificationUrl"],
+                  function (data) {
+                    const currentTime = new Date().getTime();
+                    const currentUrl = tab.url;
+                    // Check if the current URL and time are different from the last stored values
+                    if (
+                      data.lastNotificationUrl !== currentUrl ||
+                      currentTime - data.lastNotificationTime > 60000
+                    ) {
+                      // Update the storage with the current time and URL
+                      chrome.storage.local.set({
+                        lastNotificationTime: currentTime,
+                        lastNotificationUrl: currentUrl,
+                      });
+                      // Create the notification
+                      chrome.notifications.create({
+                        type: "basic",
+                        iconUrl: "icon.png",
+                        title: "Devin Status",
+                        message: "Devin is awaiting your response.",
+                      });
+                    }
+                  },
+                );
               }
             }
           },

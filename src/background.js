@@ -101,7 +101,12 @@ function checkDevinStatus() {
       statusBarMessage.textContent || statusBarMessage.innerText;
     if (messageText.startsWith("Devin is awaiting")) {
       // Extract the last message time from the status bar
-      const lastMessageTime = statusBarMessage.querySelector(
+      const lastMessageElements = document.querySelectorAll(
+        ".message-history .message-history--item",
+      );
+      const lastMessageElement =
+        lastMessageElements[lastMessageElements.length - 1];
+      const lastMessageTime = lastMessageElement.querySelector(
         "[data-state='closed']",
       ).textContent;
       // Format the last message time as "Mon 11:34 PM"

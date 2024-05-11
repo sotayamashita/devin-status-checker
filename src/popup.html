@@ -46,8 +46,39 @@
           Check Notification
         </button>
       </div>
+
+      <!-- Debug Button to Highlight Last Chat History Item -->
+      <div class="mb-1">
+        <button
+          id="highlight-last-chat"
+          type="button"
+          class="w-full rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        >
+          Highlight Last Chat
+        </button>
+      </div>
     </main>
 
     <script src="popup.js"></script>
+    <script>
+      // Add event listener to the new debug button
+      document.addEventListener("DOMContentLoaded", function () {
+        var highlightBtn = document.getElementById("highlight-last-chat");
+        highlightBtn.addEventListener(
+          "click",
+          function () {
+            // Logic to highlight the last chat history item
+            var chatItems = document.querySelectorAll(".message-history--item");
+            var lastChatItem = chatItems[chatItems.length - 1];
+            lastChatItem.style.transition = "background-color 1s";
+            lastChatItem.style.backgroundColor = "yellow";
+            setTimeout(function () {
+              lastChatItem.style.backgroundColor = "";
+            }, 1000);
+          },
+          false,
+        );
+      });
+    </script>
   </body>
 </html>

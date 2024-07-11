@@ -17,13 +17,36 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
           },
           (injectionResults) => {
             for (const frameResult of injectionResults) {
-              if (frameResult.result === "Devin is waiting") {
-                chrome.notifications.create({
-                  type: "basic",
-                  iconUrl: "icon.png",
-                  title: "Devin Status",
-                  message: "Devin is awaiting your response.",
-                });
+              if (frameResult.result.status === "Devin is waiting") {
+                // Retrieve the last notification time for the current tab from storage
+                chrome.storage.local.get(
+                  `lastNotificationTime_${tab.id}`,
+                  function (data) {
+                    // Parse the last message time from the result
+                    const lastMessageTime = Date.parse(
+                      frameResult.result.lastMessageTime,
+                    );
+                    // Check if the last message time is different from the last notification time for this tab
+                    if (
+                      !data[`lastNotificationTime_${tab.id}`] ||
+                      lastMessageTime.toString() !==
+                        data[`lastNotificationTime_${tab.id}`]
+                    ) {
+                      // Update the storage with the last message time for this tab
+                      let tabData = {};
+                      tabData[`lastNotificationTime_${tab.id}`] =
+                        lastMessageTime.toString();
+                      chrome.storage.local.set(tabData);
+                      // Create the notification
+                      chrome.notifications.create({
+                        type: "basic",
+                        iconUrl: "icon.png",
+                        title: "Devin Status",
+                        message: "Devin is awaiting your response.",
+                      });
+                    }
+                  },
+                );
               }
             }
           },
@@ -77,8 +100,29 @@ function checkDevinStatus() {
     const messageText =
       statusBarMessage.textContent || statusBarMessage.innerText;
     if (messageText.startsWith("Devin is awaiting")) {
-      return "Devin is waiting";
+      // Extract the last message time from the status bar
+      const lastMessageElements = document.querySelectorAll(
+        ".message-history .message-history--item",
+      );
+      const lastMessageElement =
+        lastMessageElements[lastMessageElements.length - 1];
+      const lastMessageTime = lastMessageElement.querySelector(
+        "[data-state='closed']",
+      ).textContent;
+      // Format the last message time as "Mon 11:34 PM"
+      const formattedLastMessageTime = new Date(
+        lastMessageTime,
+      ).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        weekday: "short",
+      });
+      return {
+        status: "Devin is waiting",
+        lastMessageTime: formattedLastMessageTime,
+      };
     }
   }
-  return "Devin is not awaiting";
+  return { status: "Devin is not awaiting" };
 }
